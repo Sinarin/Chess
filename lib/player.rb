@@ -1,4 +1,5 @@
 class Player
+  attr_reader :colour
   def initialize(name, colour, side, board)
     @board = board
     @name = name
@@ -20,3 +21,4 @@ class Player
     end
   end
 end
+
