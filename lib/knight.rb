@@ -1,11 +1,3 @@
-require_relative 'player'
-require_relative 'board'
-require_relative 'vector'
-require_relative 'king'
-require_relative 'queen'
-require_relative 'rook'
-require_relative 'pawn'
-
 
 class Knight
   #all the possible directions(vectors) a knight can move

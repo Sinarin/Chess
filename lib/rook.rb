@@ -1,11 +1,3 @@
-require_relative 'board'
-require_relative 'player'
-require_relative 'vector'
-require_relative 'king'
-require_relative 'queen'
-require_relative 'bishop'
-require_relative 'pawn'
-require_relative 'knight'
 
 class Rook
   attr_accessor :team
@@ -18,7 +10,8 @@ class Rook
     @valid_moves = nil
     @current_position = starting_position
     valid_moves()
-    @chess_board = board.chess_board
+    @chess_board = board.chess_boardr
+    @first_move = true
   end
 
   def create_vectors
@@ -74,6 +67,7 @@ class Rook
   end
 end
 
+=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'bottom', board)
 player2 = Player.new('player2', 'white', 'bottom', board)
@@ -83,3 +77,4 @@ rook = Rook.new(board, Position.new(2, 2), player2)
 rook.set_piece
 p rook.valid?(Position.new(2, 1))
 board.print_board
+=end
