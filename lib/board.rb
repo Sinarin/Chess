@@ -1,3 +1,4 @@
+
 class ChessBoard
   attr_accessor :chess_board
 
@@ -31,11 +32,14 @@ can do:
   end
 
   def print_board
+    print " "
+    ("a".."h").each { |letter| print " \u0332#{letter}"}
+    print "\n"
     (0..7).each do |rank|
-      print "|"
+      print "#{8 - rank}|"
       (1..8).each do |file|
         if get_piece(Position.new(file, 8 - rank)) == nil
-          print " |"
+          print "_|"
         else
           print "#{piece_representation(get_piece(Position.new(file, 8 - rank)))}|"
         end
@@ -47,33 +51,33 @@ can do:
 
   #maybe store this in each piece... 
   def piece_representation(piece)
-    if piece.team.colour == "black"
+    if piece.team.colour == "white"
       if piece.class == King
-        "\u265A"
+        "\u0332\u265A"
       elsif piece.class == Queen
-        "\u265B"
+        "\u0332\u265B"
       elsif piece.class == Rook
-        "\u265C"
+        "\u0332\u265C"
       elsif piece.class == Bishop
-        "\u265D"
+        "\u0332\u265D"
       elsif piece.class == Knight 
-        "\u265E"
+        "\u0332\u265E"
       elsif piece.class == Pawn
-        "\u265F"
+        "\u0332\u265F"
       end
-    elsif piece.team.colour == "white"
+    elsif piece.team.colour == "black"
       if piece.class == King
-        "\u2654"
+        "\u0332\u2654"
       elsif piece.class == Queen
-        "\u2655"
+        "\u0332\u2655"
       elsif piece.class == Rook
-        "\u2656"
+        "\u0332\u2656"
       elsif piece.class == Bishop
-        "\u2657"
+        "\u0332\u2657"
       elsif piece.class == Knight 
-        "\u2658"
+        "\u0332\u2658"
       elsif piece.class == Pawn
-        "\u2659"
+        "\u0332\u2659"
       end
     end
   end
