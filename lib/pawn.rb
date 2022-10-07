@@ -28,6 +28,14 @@ class Pawn
     end
   end
 
+  def valid_moves
+    @valid_moves << @special_move.new_position(@current_position) if @first_move
+    @attack_vectors.each do |vector|
+      position2 = vector.new_position(@current_position)
+      if position2.on_board? && position2
+        @valid_moves << 
+  end
+
 =begin
   def valid_move?(position)
     #if position given is current postion plus movement vector and not taken
@@ -40,7 +48,7 @@ class Pawn
       
     end
   end
-=end
+
 
   def check_move(position)
     if position[0].between?(1, 8) && position[1].between?(1, 8)
@@ -96,4 +104,5 @@ class Pawn
   def move(position)
     @board.chess_board[position].piece = self
   end
+=end
 end
