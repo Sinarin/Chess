@@ -9,7 +9,7 @@ require_relative 'queen'
 require_relative 'king'
 
 class Pawn
-  attr_accessor :team, :en_passant
+  attr_accessor :team, :en_passant, :valid_moves
 
   def initialize(board, starting_position, player)
     @board = board
@@ -119,7 +119,6 @@ class Pawn
 end
 
 
-=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
 player2 = Player.new('player2', 'white', 'bottom', board)
@@ -134,9 +133,9 @@ pawn2.set_piece
 board.print_board
 pawn2.move(Position.new(1, 6)) if pawn2.valid?(Position.new(1, 6))
 board.print_board
-pawn.valid_moves()
+pawn.valid_moves_check()
 board.print_board
 pawn.move(Position.new(1, 6)) if pawn2.valid?(Position.new(1, 6))
 board.print_board
-=end
+
 

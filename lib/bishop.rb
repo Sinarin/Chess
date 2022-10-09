@@ -1,7 +1,7 @@
 
 class Bishop
   #all the possible directions(vectors) a knight can move
-  attr_accessor :team
+  attr_accessor :team, :valid_moves
 
   def initialize(board, starting_position, player)
     #possible changes in position

@@ -2,7 +2,7 @@
 
 #need to add a check for check
 class King
-  attr_accessor :team
+  attr_accessor :team, :valid_moves
   def initialize(board, starting_position, player)
     #possible changes in position
     @board = board
