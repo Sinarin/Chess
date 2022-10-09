@@ -1,11 +1,3 @@
-require_relative 'board'
-require_relative 'player'
-require_relative 'vector'
-require_relative 'bishop'
-require_relative 'pawn'
-require_relative 'knight'
-require_relative 'queen'
-require_relative 'rook'
 
 
 #need to add a check for check
@@ -68,7 +60,7 @@ class King
   end
 end
 
-
+=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'bottom', board)
 player2 = Player.new('player2', 'white', 'bottom', board)
@@ -78,3 +70,4 @@ king = King.new(board, Position.new(2, 2), player2)
 king.set_piece
 p king.valid?(Position.new(4, 4))
 board.print_board
+=end

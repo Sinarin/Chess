@@ -1,8 +1,9 @@
 class Player
-  attr_reader :colour
-  def initialize(name, colour, side, board)
+  attr_accessor :colour, :side, :alive
+  def initialize(name, colour, side, board, opponent)
     @board = board
     @name = name
+    @opponent = opponent
     @colour = colour
     @side = side
     @alive = []
@@ -19,6 +20,14 @@ class Player
         Pawn.new(self, [i, 2], @board)
       end
     end
+  end
+
+  def check?
+    #do any of the opponenet move a have a valid move to your king
+    #if the current move goes through.
+    @opponent.alive.each do |piece|
+      piece.valid_moves
+      if pe
   end
 end
 
