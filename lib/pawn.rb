@@ -22,7 +22,7 @@ class Pawn
     @en_passant = nil
     @current_position = starting_position
     @valid_moves = []
-    valid_moves()
+    valid_moves_check()
     @promotion_positions = []
     promotion_positions(player)
   end
@@ -59,7 +59,7 @@ class Pawn
     end
   end
 
-  def valid_moves()
+  def valid_moves_check()
     valid_move = []
     #add double move
     valid_move << @special_move.new_position(@current_position) if @first_move

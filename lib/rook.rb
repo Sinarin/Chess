@@ -9,7 +9,7 @@ class Rook
     create_vectors()
     @valid_moves = nil
     @current_position = starting_position
-    valid_moves()
+    valid_moves_check()
     @chess_board = board.chess_board
     @first_move = true
   end
@@ -37,7 +37,7 @@ class Rook
     @board.set_piece(@current_position, self)
   end
 
-  def valid_moves()
+  def valid_moves_check()
     valid_move = []
     @vectors.each do |direction, direction_vectors|
       direction_vectors.each do |vector|

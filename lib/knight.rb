@@ -9,7 +9,7 @@ class Knight
     @team = player
     @valid_moves = nil
     @current_position = starting_position
-    valid_moves()
+    valid_moves_check()
     @chess_board = board.chess_board
   end
 
@@ -18,16 +18,16 @@ class Knight
     @board.set_piece(@current_position, self)
   end
 
-  def valid_moves()
-    valid_moves = []
+  def valid_moves_check()
+    valid_move = []
     @vectors.each do |vector|
       position2 = vector.new_position(@current_position)
       #if in range of board, and not on own team piece, 
       if position2.on_board? && @board.get_piece(position2) == nil || position2.on_board? && @board.get_piece(position2).team != @team
-        valid_moves << position2
+        valid_move << position2
       end
     end
-    @valid_moves = valid_moves
+    @valid_moves = valid_move
   end
 
   def valid?(position)
