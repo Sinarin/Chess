@@ -32,5 +32,10 @@ class Player
       end
     end
   end
+
+  def checkmate?
+    #can any of the opponents pieces make a move that results in check being false
+    
+  end
 end
 

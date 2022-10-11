@@ -100,3 +100,4 @@ class Square
 end
 
 
+(1..100000).each {|num| ChessBoard.new() }
