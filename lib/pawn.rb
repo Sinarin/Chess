@@ -1,12 +1,4 @@
-require_relative 'board'
-require_relative 'player'
-require_relative 'vector'
-require_relative 'bishop'
-require_relative 'knight'
-require_relative 'queen'
-require_relative 'rook'
-require_relative 'queen'
-require_relative 'king'
+
 
 class Pawn
   attr_accessor :team, :en_passant, :valid_moves
@@ -118,7 +110,7 @@ class Pawn
 
 end
 
-
+=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
 player2 = Player.new('player2', 'white', 'bottom', board)
@@ -137,5 +129,5 @@ pawn.valid_moves_check()
 board.print_board
 pawn.move(Position.new(1, 6)) if pawn2.valid?(Position.new(1, 6))
 board.print_board
-
+=end
 
