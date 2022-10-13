@@ -1,6 +1,6 @@
 
 class Rook
-  attr_accessor :team, :valid_moves, :first_move
+  attr_accessor :team, :valid_moves, :first_move, :current_position
   def initialize(board, starting_position, player)
     #possible changes in position
     @board = board

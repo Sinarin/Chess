@@ -1,7 +1,7 @@
 
 class Knight
   #all the possible directions(vectors) a knight can move
-  attr_accessor :team, :valid_moves
+  attr_accessor :team, :valid_moves, :current_position
   def initialize(board, starting_position, player)
     #possible changes in position
     @vectors = [Vector.new(2, 1), Vector.new(2, -1), Vector.new(-2, 1), Vector.new(-2, -1), Vector.new(1, 2), Vector.new(1, -2), Vector.new(-1, 2), Vector.new(-1, -2)]

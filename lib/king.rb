@@ -1,3 +1,4 @@
+=begin
 require_relative 'board'
 require_relative 'pawn'
 require_relative 'vector'
@@ -7,10 +8,11 @@ require_relative 'queen'
 require_relative 'rook'
 require_relative 'queen'
 require_relative 'player'
+=end
 
 #need to add a check for check
 class King
-  attr_accessor :team, :valid_moves, :current_position
+  attr_accessor :team, :valid_moves, :current_position, :first_move
   def initialize(board, starting_position, player)
     #possible changes in position
     @board = board
@@ -22,7 +24,6 @@ class King
     @current_position = starting_position
     @starting_position = starting_position
     @first_move = true
-
     
   end
   #maybe just set the vector manually...
@@ -60,10 +61,10 @@ class King
       position2 = vector.new_position(@current_position)
       #if in range of board, and not on own team piece, 
       #for left
-      if vector.x == -2 && @first_move == true && left_rook_first_move? && !@team.check? &&
+      if vector.x == -2 && @first_move == true && left_rook_first_move? && !@team.check? && left_path_clear?
          !@team.simulate_move_for_check?(Position.new(-1 + @current_position.x, @current_position.y), self) && !@team.simulate_move_for_check?(Position.new(-2 + @current_position.x, @current_position.y), self)
         valid_move << position2
-      elsif vector.x == 2 && @first_move == true && right_rook_first_move? && !@team.check? &&
+      elsif vector.x == 2 && @first_move == true && right_rook_first_move? && !@team.check? && right_path_clear?
         !@team.simulate_move_for_check?(Position.new(1 + @current_position.x, @current_position.y), self) && !@team.simulate_move_for_check?(Position.new(2 + @current_position.x, @current_position.y), self)
         valid_move << position2
       end
@@ -72,12 +73,21 @@ class King
     @valid_moves = valid_move
   end
 
+  def right_path_clear?
+    !@board.get_piece(Position.new(6, @starting_position.y)) && !@board.get_piece(Position.new(7, @starting_position.y))
+  end
+
+  def left_path_clear?
+    !@board.get_piece(Position.new(2, @starting_position.y)) && !@board.get_piece(Position.new(3, @starting_position.y)) &&
+    !@board.get_piece(Position.new(4, @starting_position.y))
+  end
+
   def left_rook_first_move?
-    @board.get_piece(Position.new(1, @current_position.y)).first_move if @board.chess_board[[1, @current_position.y]]
+    @board.get_piece(Position.new(1, @current_position.y)).first_move if @board.chess_board[[1, @current_position.y]] && @first_move == true
   end
 
   def right_rook_first_move?
-    @board.get_piece(Position.new(8, @current_position.y)).first_move if @board.chess_board[[8, @current_position.y]]
+    @board.get_piece(Position.new(8, @current_position.y)).first_move if @board.chess_board[[8, @current_position.y]] && @first_move == true
   end
 
   def valid?(position)
@@ -100,12 +110,12 @@ class King
   end
 end
 
-
+=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
 player2 = Player.new('player2', 'white', 'bottom', board, player)
 player.opponent = player2
-bishop = Bishop.new(board, Position.new(7, 8), player)
+bishop = Bishop.new(board, Position.new(7, 1), player)
 bishop.set_piece
 rook = Rook.new(board, Position.new(8, 1), player2)
 rook.set_piece
@@ -121,6 +131,6 @@ player2.king = king
 king.valid_moves_check()
 
 p king.valid_moves
-king.move(Position.new(7, 1)) if king.valid?(Position.new(7, 1))
+king.move(Position.new(3, 1)) if king.valid?(Position.new(3, 1))
 board.print_board
-
+=end

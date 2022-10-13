@@ -1,7 +1,7 @@
 
 
 class Pawn
-  attr_accessor :team, :en_passant, :valid_moves
+  attr_accessor :team, :en_passant, :valid_moves, :current_position
 
   def initialize(board, starting_position, player)
     @board = board
@@ -106,6 +106,7 @@ class Pawn
     @first_move = false
     special_move_used(position)
     en_passant_used(position)
+    @en_passant = nil
   end
 
 end

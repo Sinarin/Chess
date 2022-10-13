@@ -1,4 +1,4 @@
-=begin
+
 require_relative 'board'
 require_relative 'pawn'
 require_relative 'vector'
@@ -8,7 +8,7 @@ require_relative 'queen'
 require_relative 'rook'
 require_relative 'queen'
 require_relative 'king'
-=end
+
 
 class Player
   attr_accessor :colour, :side, :alive, :opponent, :king
@@ -25,13 +25,27 @@ class Player
 
   def create_team
     if @side == "top"
-      for i in 1..8
-        Pawn.new(self, [i, 7], @board)
-      end
+      pawn_row = 7
+      back_row = 8
     elsif @side == "bottom"
-      for i in 1..8
-        Pawn.new(self, [i, 2], @board)
-      end
+      pawn_row = 2
+      back_row = 1
+    end
+
+    for i in 1..8
+      @alive << Pawn.new(@board, Position.new(i, pawn_row), self)
+    end
+    @alive << Rook.new(@board, Position.new(1, back_row), self)
+    @alive << Rook.new(@board, Position.new(8, back_row), self)
+    @alive << Knight.new(@board, Position.new(2, back_row), self)
+    @alive << Knight.new(@board, Position.new(7, back_row), self)
+    @alive << Bishop.new(@board, Position.new(3, back_row), self)
+    @alive << Bishop.new(@board, Position.new(6, back_row), self)
+    @alive << Queen.new(@board, Position.new(4, back_row), self)
+    @king = King.new(@board, Position.new(5, back_row), self)
+    @alive << @king
+    @alive.each do |piece|
+      @board.set_piece(piece.current_position, piece)
     end
   end
 
@@ -70,9 +84,49 @@ class Player
     true   
   end
 
+  #update valid moves before this....
+  def stalemate
+    @alive.each do |piece|
+      piece.valid_moves.each do |move|
+        return false if !simulate_move_for_check?(move, piece)
+      end
+    end
+    return true
+  end
+
 end
 
+
+
+board = ChessBoard.new 
+player = Player.new('player1', 'black', 'top', board)
+player2 = Player.new('player2', 'white', 'bottom', board, player)
+player.opponent = player2
+rook1 = Rook.new(board, Position.new(3, 3), player)
+rook1.set_piece
+rook = Rook.new(board, Position.new(3, 2), player)
+rook.set_piece
+king = King.new(board, Position.new(1,1), player2)
+king.set_piece
+player.alive << rook1
+player.alive << rook
+player2.alive << king
+player2.king = king
+rook1.valid_moves_check
+rook.valid_moves_check
+king.first_move = false
+king.valid_moves_check
+board.print_board
+p player2.stalemate
 =begin
+board = ChessBoard.new 
+player = Player.new('player1', 'black', 'top', board)
+player2 = Player.new('player2', 'white', 'bottom', board, player)
+player.opponent = player2
+player.create_team
+player2.create_team
+board.print_board
+
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
 player2 = Player.new('player2', 'white', 'bottom', board, player)
