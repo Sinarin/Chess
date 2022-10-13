@@ -1,6 +1,6 @@
 
 class Rook
-  attr_accessor :team, :valid_moves
+  attr_accessor :team, :valid_moves, :first_move
   def initialize(board, starting_position, player)
     #possible changes in position
     @board = board
@@ -64,6 +64,7 @@ class Rook
     @board.set_piece(@current_position, nil)
     @board.set_piece(position, self)
     @current_position = position
+    @first_move = false
   end
 end
 

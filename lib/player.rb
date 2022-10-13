@@ -1,3 +1,4 @@
+=begin
 require_relative 'board'
 require_relative 'pawn'
 require_relative 'vector'
@@ -7,9 +8,10 @@ require_relative 'queen'
 require_relative 'rook'
 require_relative 'queen'
 require_relative 'king'
+=end
 
 class Player
-  attr_accessor :colour, :side, :alive
+  attr_accessor :colour, :side, :alive, :opponent, :king
   def initialize(name, colour, side, board, opponent = nil)
     @board = board
     @name = name
@@ -18,6 +20,7 @@ class Player
     @side = side
     @alive = []
     @dead = []
+    @king = nil
   end
 
   def create_team
@@ -37,10 +40,19 @@ class Player
     #if the current move goes through.
     @opponent.alive.each do |piece|
       piece.valid_moves_check
-      if piece.valid_moves.any? {|position| position.same_values?(@king_position)}
+      #are there any moves that opponent piece can do to land on the current king position
+      if piece.valid_moves.any? {|position| position.same_values?(self.king.current_position)}
         return true
       end
     end
+    false
+  end
+
+  def simulate_move_for_check?(move, piece)
+    sim_board = Marshal.load(Marshal.dump(@board))
+    sim_piece = sim_board.get_piece(piece.current_position)
+    sim_piece.move(move)
+    sim_piece.team.check?
   end
 
   def checkmate?
@@ -60,14 +72,24 @@ class Player
 
 end
 
+=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
-player2 = Player.new('player2', 'white', 'bottom', board)
-bishop = Bishop.new(board, Position.new(7, 2), player)
-bishop.set_piece
-rook = Rook.new(board, Position.new(7, 7), player2)
+player2 = Player.new('player2', 'white', 'bottom', board, player)
+player.opponent = player2
+rook1 = Rook.new(board, Position.new(2, 3), player)
+rook1.set_piece
+rook = Rook.new(board, Position.new(1, 1), player)
 rook.set_piece
-simboard = Marshal.load(Marshal.dump(board))
-p simboard.chess_board[[7, 2]].piece == board.chess_board[[7, 2]].piece
+king = King.new(board, Position.new(7,1), player2)
+king.set_piece
+player.alive << rook1
+player.alive << rook
+player2.alive << king
+player2.king = king
+p player2.check?
+p player2.checkmate?
+p player2.simulate_move_for_check?(Position.new(7,2), king)
 
 #to test check mate use two rooks... first... maybe in rspec
+=end
