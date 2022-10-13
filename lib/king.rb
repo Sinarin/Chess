@@ -20,6 +20,7 @@ class King
     create_vectors()
     @valid_moves = nil
     @current_position = starting_position
+    @starting_position = starting_position
     @first_move = true
 
     
@@ -91,6 +92,11 @@ class King
     @board.set_piece(position, self)
     @current_position = position
     @first_move = false
+    if position.same_values?(Vector.new(2, 0).new_position(@starting_position))
+      @board.get_piece(Position.new(8, @starting_position.y)).move(Position.new(6, @starting_position.y))
+    elsif position.same_values?(Vector.new(-2, 0).new_position(@starting_position))
+      @board.get_piece(Position.new(1, @starting_position.y)).move(Position.new(4, @starting_position.y))
+    end
   end
 end
 
@@ -115,6 +121,6 @@ player2.king = king
 king.valid_moves_check()
 
 p king.valid_moves
-p king.valid?(Position.new(3, 1))
+king.move(Position.new(7, 1)) if king.valid?(Position.new(7, 1))
 board.print_board
 
