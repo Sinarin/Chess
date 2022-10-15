@@ -98,3 +98,5 @@ class Square
     @adjacent_nodes << node
   end
 end
+
+

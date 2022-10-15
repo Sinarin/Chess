@@ -11,7 +11,7 @@ require_relative 'king'
 
 
 class Player
-  attr_accessor :colour, :side, :alive, :opponent, :king
+  attr_accessor :colour, :side, :alive, :opponent, :king, :game
   def initialize(name, colour, side, board, opponent = nil)
     @board = board
     @name = name
@@ -20,6 +20,7 @@ class Player
     @side = side
     @alive = []
     @dead = []
+    @game = nil
     @king = nil
   end
 
@@ -94,6 +95,11 @@ class Player
     return true
   end
 
+  def three_move_repetition
+  end
+
+  def insufficent_pieces
+  end
 end
 
 
