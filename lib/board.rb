@@ -82,6 +82,37 @@ can do:
     end
   end
 
+  def to_fen_string
+    fen = ""
+    for y in 1..8
+      space_count = 0
+      for x in 1..8
+        piece = @board[[x, y]].piece
+        if piece == nil
+          space_count += 0
+          fen += "#{space_count}" if x == 8 
+        else
+          piece_class = @piece.class
+          if piece_class == Knight
+            if piece.team.colour == "black"
+              fen += "n"
+            else
+              fen += "N"
+            end
+          else
+            if piece.team.colour == "black"
+              fen += piece_class.to_s[0].to_lower
+            else
+              fen += piece_class.to_s[0]
+            end
+          end
+        end
+      end
+      fen += "/" unless y = 8
+    end
+    #add the rest of the fen string stuff....
+  end
+  
 end
 
 
