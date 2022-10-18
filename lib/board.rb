@@ -1,3 +1,13 @@
+require_relative 'player'
+require_relative 'pawn'
+require_relative 'vector'
+require_relative 'bishop'
+require_relative 'knight'
+require_relative 'queen'
+require_relative 'rook'
+require_relative 'queen'
+require_relative 'king'
+
 
 class ChessBoard
   attr_accessor :chess_board
@@ -84,34 +94,67 @@ can do:
 
   def to_fen_string
     fen = ""
-    for y in 1..8
+    (1..8).reverse_each do |y|
       space_count = 0
       for x in 1..8
-        piece = @board[[x, y]].piece
+        piece = @chess_board[[x, y]].piece
         if piece == nil
-          space_count += 0
+          space_count += 1
           fen += "#{space_count}" if x == 8 
         else
-          piece_class = @piece.class
+          piece_class = piece.class
           if piece_class == Knight
             if piece.team.colour == "black"
+              fen += "#{space_count}" if space_count > 0
+              space_count = 0
               fen += "n"
             else
+              fen += "#{space_count}" if space_count > 0
+              space_count = 0
               fen += "N"
             end
           else
             if piece.team.colour == "black"
-              fen += piece_class.to_s[0].to_lower
+              fen += "#{space_count}"  if space_count > 0
+              space_count = 0
+              fen += piece_class.to_s[0].downcase
             else
+              fen += "#{space_count}"  if space_count > 0
+              space_count = 0
               fen += piece_class.to_s[0]
             end
           end
         end
       end
-      fen += "/" unless y = 8
+      fen += "/" unless y == 1
     end
-    #add the rest of the fen string stuff....
+    fen
   end
+
+  def castle_rights(player)
+    king = player.king
+    #check castling rights
+    fen_add_on = ""
+    #queen side comes first so do reverse so king is iterated over first
+    king.castling_vector.reverse_each do |vector|
+      position2 = vector.new_position(king.current_position)
+      if king.valid_moves.any? { |move| move.same_values?(position2)} && vector.x == 2
+        fen_add_on += "K"
+      elsif king.valid_moves.any? { |move| move.same_values?(position2)} && vector.x == -2
+        fen_add_on += "Q"
+      end
+    end
+    if player.colour == "black"
+      fen_add_on.downcase
+    else
+      fen_add_on
+    end
+  end
+
+  #add turn tracker...
+  #half move and full move tracker
+
+  
   
 end
 
@@ -130,4 +173,24 @@ class Square
   end
 end
 
-
+board = ChessBoard.new 
+player = Player.new('player1', 'black', 'top', board)
+player2 = Player.new('player2', 'white', 'bottom', board, player)
+player.opponent = player2
+player2.create_team
+pawn = Pawn.new(board, Position.new(5, 5), player)
+pawn.set_piece
+rook = Rook.new(board, Position.new(8, 8), player)
+rook.set_piece
+rook1 = Rook.new(board, Position.new(1, 8), player)
+rook1.set_piece
+king = King.new(board, Position.new(5, 8), player)
+king.set_piece
+player.alive << rook
+player.alive << rook1
+player.alive << king
+player.king = king
+player.update_valid_moves
+board.print_board
+p board.to_fen_string
+p board.castle_rights(player)

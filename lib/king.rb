@@ -12,7 +12,7 @@ require_relative 'player'
 
 #need to add a check for check
 class King
-  attr_accessor :team, :valid_moves, :current_position, :first_move
+  attr_accessor :team, :valid_moves, :current_position, :first_move, :castling_vector
   def initialize(board, starting_position, player)
     #possible changes in position
     @board = board
@@ -58,13 +58,15 @@ class King
     end
 
     @castling_vector.each do |vector|
+      
       position2 = vector.new_position(@current_position)
+
       #if in range of board, and not on own team piece, 
       #for left
-      if vector.x == -2 && @first_move == true && left_rook_first_move? && !@team.check? && left_path_clear?
+      if vector.x == -2 && @first_move == true && left_rook_first_move? && left_path_clear? && !@team.check? &&
          !@team.simulate_move_for_check?(Position.new(-1 + @current_position.x, @current_position.y), self) && !@team.simulate_move_for_check?(Position.new(-2 + @current_position.x, @current_position.y), self)
         valid_move << position2
-      elsif vector.x == 2 && @first_move == true && right_rook_first_move? && !@team.check? && right_path_clear?
+      elsif vector.x == 2 && @first_move == true && right_rook_first_move? && right_path_clear? && !@team.check? &&
         !@team.simulate_move_for_check?(Position.new(1 + @current_position.x, @current_position.y), self) && !@team.simulate_move_for_check?(Position.new(2 + @current_position.x, @current_position.y), self)
         valid_move << position2
       end

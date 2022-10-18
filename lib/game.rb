@@ -1,4 +1,4 @@
-
+=begin
 require_relative 'board'
 require_relative 'pawn'
 require_relative 'vector'
@@ -9,6 +9,8 @@ require_relative 'rook'
 require_relative 'queen'
 require_relative 'king'
 require_relative 'player'
+=end 
+
 class Game
   def initialize
     @count50 = 0
@@ -55,3 +57,14 @@ class Game
   def tie
   end
 end
+
+=begin
+board = ChessBoard.new 
+player = Player.new('player1', 'black', 'top', board)
+player2 = Player.new('player2', 'white', 'bottom', board, player)
+player.opponent = player2
+player.create_team
+player2.create_team
+board.print_board
+p board.to_fen_string
+=end

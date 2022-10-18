@@ -1,4 +1,4 @@
-
+=begin
 require_relative 'board'
 require_relative 'pawn'
 require_relative 'vector'
@@ -8,6 +8,7 @@ require_relative 'queen'
 require_relative 'rook'
 require_relative 'queen'
 require_relative 'king'
+=end
 
 
 class Player
@@ -50,10 +51,20 @@ class Player
     end
   end
 
+  def update_valid_moves
+    @alive.each do |piece|
+      piece.valid_moves_check
+    end
+    @opponent.alive.each do |piece|
+      piece.valid_moves_check
+    end
+  end
+
   def check?
     #do any of the opponnet move a have a valid move to your king
     #if the current move goes through.
     @opponent.alive.each do |piece|
+      next if piece.class == King
       piece.valid_moves_check
       #are there any moves that opponent piece can do to land on the current king position
       if piece.valid_moves.any? {|position| position.same_values?(self.king.current_position)}
@@ -103,7 +114,7 @@ class Player
 end
 
 
-
+=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
 player2 = Player.new('player2', 'white', 'bottom', board, player)
@@ -124,7 +135,7 @@ king.first_move = false
 king.valid_moves_check
 board.print_board
 p player2.stalemate
-=begin
+
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
 player2 = Player.new('player2', 'white', 'bottom', board, player)
