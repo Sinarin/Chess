@@ -1,3 +1,4 @@
+=begin
 require_relative 'player'
 require_relative 'pawn'
 require_relative 'vector'
@@ -7,6 +8,7 @@ require_relative 'queen'
 require_relative 'rook'
 require_relative 'queen'
 require_relative 'king'
+=end
 
 
 class ChessBoard
@@ -173,6 +175,7 @@ class Square
   end
 end
 
+=begin
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
 player2 = Player.new('player2', 'white', 'bottom', board, player)
@@ -194,3 +197,4 @@ player.update_valid_moves
 board.print_board
 p board.to_fen_string
 p board.castle_rights(player)
+=end
