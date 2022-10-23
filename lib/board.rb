@@ -40,6 +40,12 @@ can do:
   end
 
   def set_piece(position, chess_piece)
+    piece = @chess_board[[position.x, position.y]].piece
+    #if a piece is in that spot already
+    if piece && chess_piece
+      team = piece.team
+      team.dead << team.alive.delete(piece)
+    end
     @chess_board[[position.x, position.y]].piece = chess_piece
   end
 

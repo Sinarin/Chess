@@ -1,9 +1,20 @@
 
+=begin
+require_relative 'board'
+require_relative 'vector'
+require_relative 'bishop'
+require_relative 'knight'
+require_relative 'queen'
+require_relative 'rook'
+require_relative 'queen'
+require_relative 'king'
+require_relative 'player'
+=end
 
 class Pawn
   attr_accessor :team, :en_passant, :valid_moves, :current_position
 
-  def initialize(board, starting_position, player)
+  def initialize(board, starting_position, player, game = nil)
     @board = board
     @starting_position = starting_position
     @team = player
@@ -14,6 +25,7 @@ class Pawn
     @en_passant = nil
     @current_position = starting_position
     @valid_moves = []
+    @game = game
     valid_moves_check()
     @promotion_positions = []
     promotion_positions(player)
@@ -54,11 +66,12 @@ class Pawn
   def valid_moves_check()
     valid_move = []
     #add double move
-    valid_move << @special_move.new_position(@current_position) if @first_move
+    double_move_pos = @special_move.new_position(@current_position)
+    valid_move << double_move_pos if @first_move && @board.get_piece(double_move_pos) == nil
     #add attack moves
     @attack_vectors.each do |vector|
       position2 = vector.new_position(@current_position)
-      if position2.on_board? && @board.get_piece(position2) != nil && @board.get_piece(position2).team == @team
+      if position2.on_board? && @board.get_piece(position2) != nil && @board.get_piece(position2).team != @team
         valid_move << position2
       end
     end
@@ -66,6 +79,7 @@ class Pawn
     pos3 = @movement_vectors.new_position(@current_position)
     valid_move << pos3 if pos3.on_board? && @board.get_piece(pos3) == nil
     #add en passant
+    
     valid_move << @en_passant if @en_passant != nil
 
     @valid_moves = valid_move 
@@ -92,9 +106,12 @@ class Pawn
       #if right of current position is enemy team give that piece the ability(position) to enpassant same with left....
       if left_piece != nil && left_piece.class == Pawn && left_piece.team != @team
         left_piece.en_passant = @movement_vectors.new_position(@starting_position)
+        #put enpassasthe to player??
+        #@game.en_passant = @movement_vectors.new_position(@starting_position)
       end
       if right_piece != nil && right_piece.class == Pawn && right_piece.team != @team
         right_piece.en_passant = @movement_vectors.new_position(@starting_position)
+        #@game.en_passant = @movement_vectors.new_position(@starting_position)
       end
     end
   end 
@@ -130,5 +147,6 @@ pawn.valid_moves_check()
 board.print_board
 pawn.move(Position.new(1, 6)) if pawn2.valid?(Position.new(1, 6))
 board.print_board
+
 =end
 

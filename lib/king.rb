@@ -85,11 +85,11 @@ class King
   end
 
   def left_rook_first_move?
-    @board.get_piece(Position.new(1, @current_position.y)).first_move if @board.chess_board[[1, @current_position.y]] && @first_move == true
+    @board.get_piece(Position.new(1, @current_position.y)).first_move if @board.chess_board[[1, @current_position.y]].piece && @first_move == true
   end
 
   def right_rook_first_move?
-    @board.get_piece(Position.new(8, @current_position.y)).first_move if @board.chess_board[[8, @current_position.y]] && @first_move == true
+    @board.get_piece(Position.new(8, @current_position.y)).first_move if @board.chess_board[[8, @current_position.y]].piece && @first_move == true
   end
 
   def valid?(position)
