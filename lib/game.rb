@@ -23,47 +23,103 @@ class Game
     @en_passant_white = nil
     @player1 = nil
     @player2 = nil
+    @board_state = Hash.new(0)
+  end
+
+  def ask_save
+    puts "would you like to save your game?"
+    answer = gets.chomp.downcase
+    if answer == "y" || answer == "yes"
+      save()
+    end
+  end
+
+  def name_file
+    while true
+      puts "What would you like to name your file? (letters, numbers and underscores only)"
+      filename = gets.chomp
+      if filename !~ /\A[a-zA-z0-9_]+\z/
+        puts "Invalid file name. Try Again."
+      elsif File.exist?('save_files/' + filename + ".dat")
+        puts "File name exists already, do you want to write over this file?"
+        answer = gets.chomp.downcase
+        if answer == "y" || answer == "yes"
+          break
+        end
+      end
+    end
+    filename ='save_files/' + filename + ".dat"
+    return filename
+  end
+
+  def save
+    filename = name_file
+    Dir.mkdir('save_files') unless Dir.exist?('save_files')
+    File.open(filename, "w") do |file|
+      file.write Marshal.dump(self)
+    end
+  end
+
+  def load
+    puts "enter file name (without file extension)"
+    filename = 'save_files/' + gets.chomp + '.dat'
+    if File.exist?(filename)
+      file = File.open(filename, 'r').read
+      d = Marshal.load(file)
+    else
+      puts "filename does not exist, please enter a valid text save file."
+      load()
+    end
+    d
   end
 
   def start_game
+    puts "would like like to load a past game file?"
+    answer = gets.chomp.downcase
+    if answer == "y" || answer == "yes"
+      load.start_turns
+    else
     #add a method that asks player one what side...
-    board = ChessBoard.new 
-    @board = board
-    player1 = Player.new('player1', 'white', 'top', board)
-    @turn = player1
-    player2 = Player.new('player2', 'black', 'bottom', board, player1)
-    player1.opponent = player2
-    @player1 = player1
-    @player2 = player2
-    player1.game = self
-    player2.game = self
-    player1.opponent = player2
-    player1.create_team
-    player2.create_team
-    player1.update_valid_moves
-    board.print_board
-    p to_fen_string()
-
-    while 
-      #add counter in here to count for statemate
-      turn(player1)
+      board = ChessBoard.new 
+      @board = board
+      player1 = Player.new('player1', 'white', 'top', board)
+      @turn = player1
+      player2 = Player.new('player2', 'black', 'bottom', board, player1)
+      player1.opponent = player2
+      @player1 = player1
+      @player2 = player2
+      player1.game = self
+      player2.game = self
+      player1.opponent = player2
+      player1.create_team
+      player2.create_team
       player1.update_valid_moves
-=begin
-      p player2.check?
-=end
-      break if player2.checkmate? || statemate?()
-      turn(player2)
-      player2.update_valid_moves
-=begin
-      p player1.check?
-=end
-      break if player1.checkmate? || statemate?()
+      board.print_board
+      start_turns()
+    end
+  end
+
+  def add_fen()
+    @board_state[to_fen_string[0, 50]] += 1
+  end
+
+  def start_turns
+    while 
+      #add counter in here to count for stalemate
+      turn(@turn)
+      @turn.update_valid_moves
+      break if @turn.checkmate? || stalemate?()
+      p @board_state
+      
+      ask_save()
+      turn(@turn)
+      @turn.update_valid_moves
+      break if @turn.checkmate? || stalemate?()
+      p @board_state
     end
 
-    if player1.checkmate?
-      you_win(player2)
-    elsif player2.checkmate?
-      you_win(player1)
+    if @turn.checkmate?
+      you_win(@turn.opponent)
     else
       tie()
     end
@@ -198,19 +254,39 @@ class Game
     fen
   end
 
-  def you_win()
+  def you_win(player)
+    puts "#{player.opponent.name} has been checkmated, #{player.name} Wins!"
+    puts "would you like to play again?"
+    answer = gets.chomp.downcase
+    if answer == "y" || answer == "yes"
+      start_game()
+    else
+      exit
+    end
   end
 
-  def statemate?()
-    false
+  def stalemate?()
+    add_fen() == 3 || insufficent_pieces() || @count50 == 50
+  end
+
+  def insufficent_pieces()
   end
 
   def tie
+    puts "Draw"
+    puts "would you like to play again?"
+    answer = gets.chomp.downcase
+    if answer == "y" || answer == "yes"
+      start_game()
+    else
+      exit
+    end
   end
 end
 
 game = Game.new()
 game.start_game
+
 
 
 =begin
