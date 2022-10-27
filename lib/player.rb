@@ -1,3 +1,4 @@
+=begin
 
 require_relative 'board'
 require_relative 'pawn'
@@ -7,6 +8,7 @@ require_relative 'knight'
 require_relative 'queen'
 require_relative 'rook'
 require_relative 'king'
+=end
 
 
 
@@ -144,7 +146,7 @@ player.opponent = player2
 player.create_team
 player2.create_team
 board.print_board
-=end
+
 
 board = ChessBoard.new 
 player = Player.new('player1', 'black', 'top', board)
@@ -169,3 +171,4 @@ p player2.checkmate?
 p player2.simulate_move_for_check?(Position.new(2, 2), king)
 
 #to test check mate use two rooks... first... maybe in rspec
+=end

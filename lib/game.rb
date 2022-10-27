@@ -112,13 +112,12 @@ class Game
       turn(@turn)
       @turn.update_valid_moves
       break if @turn.checkmate? || stalemate?()
-      p @board_state
-      
       ask_save()
+      
       turn(@turn)
       @turn.update_valid_moves
       break if @turn.checkmate? || stalemate?()
-      p @board_state
+      ask_save()
     end
 
     if @turn.checkmate?
@@ -174,7 +173,7 @@ class Game
   def ask_starting_input()
     while true
       puts 'Enter postion of piece you would like to move:'
-      starting = gets.chomp().downcase
+      starting = gets.chomp.downcase
       if starting.length == 2 && starting[0].between?("a", "h") && starting[1].to_i.between?(1, 8)
           return starting
       end
