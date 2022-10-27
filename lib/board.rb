@@ -146,9 +146,9 @@ can do:
     #queen side comes first so do reverse so king is iterated over first
     king.castling_vector.reverse_each do |vector|
       position2 = vector.new_position(king.current_position)
-      if king.valid_moves.any? { |move| move.same_values?(position2)} && vector.x == 2
+      if vector.x == 2 && king.first_move == true && king.right_rook_first_move?
         fen_add_on += "K"
-      elsif king.valid_moves.any? { |move| move.same_values?(position2)} && vector.x == -2
+      elsif vector.x == -2 && king.first_move == true && king.left_rook_first_move?
         fen_add_on += "Q"
       end
     end

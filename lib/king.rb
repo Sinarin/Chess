@@ -75,6 +75,16 @@ class King
     @valid_moves = valid_move
   end
 
+  def queen_side(vector)
+    vector.x == -2 && @first_move == true && left_rook_first_move? && left_path_clear? && !@team.check? &&
+         !@team.simulate_move_for_check?(Position.new(-1 + @current_position.x, @current_position.y), self) && !@team.simulate_move_for_check?(Position.new(-2 + @current_position.x, @current_position.y), self)
+  end
+
+  def king_side(vector)
+    vector.x == 2 && @first_move == true && right_rook_first_move? && right_path_clear? && !@team.check? &&
+        !@team.simulate_move_for_check?(Position.new(1 + @current_position.x, @current_position.y), self) && !@team.simulate_move_for_check?(Position.new(2 + @current_position.x, @current_position.y), self)
+  end
+
   def right_path_clear?
     !@board.get_piece(Position.new(6, @starting_position.y)) && !@board.get_piece(Position.new(7, @starting_position.y))
   end

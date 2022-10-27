@@ -100,10 +100,13 @@ class Game
   end
 
   def add_fen()
-    @board_state[to_fen_string[0, 50]] += 1
+    fen = to_fen_string
+    @board_state[fen[0, fen.length - 4]] += 1
   end
 
   def start_turns
+    p to_fen_string
+    p @board.castle_rights(@player1)
     while 
       #add counter in here to count for stalemate
       turn(@turn)
@@ -163,7 +166,6 @@ class Game
       @en_passant_white = nil
     end
     @board.print_board
-    @count50 += 1
     @count100 += 1
     @turn = player.opponent
     player.update_valid_moves
